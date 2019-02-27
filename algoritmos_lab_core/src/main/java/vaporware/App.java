@@ -1,13 +1,14 @@
 package vaporware;
 
-/**
- * Hello world!
- *
- */
-public class App 
+import vaporware.practica1.Practica1;
+
+public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        Practica [] practicas = {new Practica1()};
+        for(Practica p :practicas){
+            p.ejecutar();
+        }
     }
 }
