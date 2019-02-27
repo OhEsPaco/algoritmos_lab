@@ -6,37 +6,38 @@ import java.util.Stack;
 public class CombinatorioPila extends Combinatorio {
     @Override
     protected BigInteger algoritmo(int n, int k) {
-        BigInteger resultado=new BigInteger("1");
-        Stack<Instantanea> pila=new Stack<Instantanea>();
+
+        BigInteger resultado = new BigInteger("1");
+
+        Stack<Instantanea> pila = new Stack<Instantanea>();
+
         Instantanea situacionActual;
 
-        pila.add(new Instantanea(n,k,0));
+        //Empezamos el algoritmo con n y k
+        pila.add(new Instantanea(n, k, 0));
 
-        while (!pila.isEmpty()){
-            situacionActual=pila.pop();
-            switch (situacionActual.getEtapa()){
+        while (!pila.isEmpty()) {
+
+            situacionActual = pila.pop();
+
+            switch (situacionActual.getEtapa()) {
                 case 0:
-                    if(situacionActual.getN()!=situacionActual.getK() && situacionActual.getK()!=0){
+                    if (situacionActual.getN() != situacionActual.getK() && situacionActual.getK() != 0) {
+                        //Si no es el caso base ponemos la etapa a 1 y la devolvemos a la pila
                         situacionActual.setEtapa(1);
                         pila.push(situacionActual);
 
-                        Instantanea situacionSiguiente = new Instantanea(situacionActual.getN()-1,situacionActual.getK()-1,0);
-                        pila.push(situacionSiguiente);
+                        //C(n-1,k-1)
+                        pila.push(new Instantanea(situacionActual.getN() - 1, situacionActual.getK() - 1, 0));
+
+                        //C(n-1,k)
+                        pila.push(new Instantanea(situacionActual.getN() - 1, situacionActual.getK(), 0));
                     }
                     break;
                 case 1:
-                    if(situacionActual.getN()!=situacionActual.getK() && situacionActual.getK()!=0){
-                        situacionActual.setEtapa(2);
-                        pila.push(situacionActual);
-
-                        Instantanea situacionSiguiente = new Instantanea(situacionActual.getN()-1,situacionActual.getK(),0);
-                        pila.push(situacionSiguiente);
-                    }
-                    break;
-                case 2:
-                    situacionActual.setResultadoParcial(resultado.add(situacionActual.getResultadoParcial()));;
-                    resultado=situacionActual.getResultadoParcial();
-
+                    //C(n,k)=C(n-1,k-1)+C(n-1,k)
+                    situacionActual.setResultadoParcial(resultado.add(situacionActual.getResultadoParcial()));
+                    resultado = situacionActual.getResultadoParcial();
                     break;
             }
         }
@@ -53,7 +54,7 @@ public class CombinatorioPila extends Combinatorio {
         private int n;
         private int k;
         private int etapa;
-        private BigInteger resultadoParcial=new BigInteger("1");
+        private BigInteger resultadoParcial = new BigInteger("1");
 
         public Instantanea(int n, int k, int etapa) {
             this.n = n;

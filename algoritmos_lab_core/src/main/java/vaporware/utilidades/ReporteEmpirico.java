@@ -5,10 +5,6 @@ public class ReporteEmpirico {
     private long end_time = 0;
     private int mode = 0;
 
-    public ReporteEmpirico() {
-
-    }
-
     public void runTest() {
         switch (mode) {
             case 0:
@@ -27,6 +23,8 @@ public class ReporteEmpirico {
 
     public void reset() {
         mode = 0;
+        start_time = 0;
+        end_time = 0;
     }
 
     public String toString() {
