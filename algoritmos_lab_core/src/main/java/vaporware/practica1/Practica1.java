@@ -4,6 +4,8 @@ import vaporware.Practica;
 import vaporware.utilidades.IO;
 import vaporware.utilidades.ReporteEmpirico;
 
+import java.math.BigInteger;
+
 public class Practica1 implements Practica {
     @Override
     public void ejecutar() {
@@ -18,7 +20,7 @@ public class Practica1 implements Practica {
         for (Combinatorio comb:experimentos){
             System.out.println("[Ejecutando "+comb.getTipo()+"]");
             reporte.runTest();
-            long resultado=comb.algoritmo(n,k);
+            BigInteger resultado=comb.algoritmo(n,k);
             reporte.runTest();
             System.out.println("El resultado es: "+resultado);
             System.out.println("Se han tardado "+ reporte.toString()+"\n");
