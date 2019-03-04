@@ -42,7 +42,7 @@ public class Practica1 implements Practica {
                 System.out.println("El resultado es: " + resultado);
                 System.out.println("Se han tardado " + reporte.toString() + "\n");
 
-            } catch (Exception e) {
+            } catch (java.lang.StackOverflowError | Exception a) {
                 //Si hay una excepcion mostramos el tiempo que ha estado ejecutandose hasta el fallo
                 reporte.runTest();
                 System.out.println("El algoritmo " + comb.getTipo() + " ha fallado.");
