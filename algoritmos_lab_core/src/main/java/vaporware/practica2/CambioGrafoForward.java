@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 public class CambioGrafoForward extends Cambio {
 
-
     @Override
     public int[] calcularCambio(int[] monedas, int cambio) {
 
@@ -26,9 +25,8 @@ public class CambioGrafoForward extends Cambio {
 
     @Override
     public String getTipo() {
-        return "Cambio grafo forward";
+        return "grafo forward";
     }
-
 
     private Nodo algoritmo(int[] monedas, int cambio) {
         //El primer nodo es del valor de la constante MONEDA_INICIAL
@@ -42,7 +40,6 @@ public class CambioGrafoForward extends Cambio {
 
         //Ponemos el primer nodo en la lista
         anchura.add(primerNodo);
-
 
         while (!anchura.isEmpty()) {
 
@@ -77,7 +74,9 @@ public class CambioGrafoForward extends Cambio {
                         hijo.setPadre(padre);
 
                         //Ponemos el nodo en la lista
-                        anchura.add(hijo);
+                        if (!anchura.contains(hijo)) {
+                            anchura.add(hijo);
+                        }
 
                         //Si es mejor que la solucion actual lo marcamos como solucion
                         if (esMejor(hijo, solucion)) {
@@ -93,7 +92,6 @@ public class CambioGrafoForward extends Cambio {
         }
         return solucion;
     }
-
 
     private boolean esMejor(Nodo hijo, Nodo solucion) {
         /*
@@ -128,8 +126,8 @@ public class CambioGrafoForward extends Cambio {
 
     }
 
-
     private class Nodo {
+
         //Valor de la moneda que ha generado el nodo
         private int moneda;
 
@@ -163,11 +161,9 @@ public class CambioGrafoForward extends Cambio {
             return moneda;
         }
 
-
         public int getCoste() {
             return coste;
         }
-
 
         public int getRestante() {
             return restante;
@@ -178,4 +174,5 @@ public class CambioGrafoForward extends Cambio {
         }
 
     }
+
 }

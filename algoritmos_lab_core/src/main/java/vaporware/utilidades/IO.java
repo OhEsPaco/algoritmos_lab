@@ -22,5 +22,33 @@ public class IO {
         } while (true);
     }
 
+    public static int[] pedirEnteros(String msg, String error) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(msg);
+        int[] salida = null;
+        boolean continuar = true;
+
+        do {
+
+            String split = sc.nextLine();
+            String[]splited=split.split("\\s+");
+            salida = new int[splited.length];
+
+            try {
+                for (int i = 0; i < splited.length; i++) {
+
+                    salida[i] = Integer.parseInt(splited[i]);
+
+                }
+                continuar = false;
+            } catch (Exception e) {
+                 
+                System.out.println(error);
+            }
+
+        } while (continuar);
+
+        return Utilidades.ordenarArray(salida);
+    }
 
 }
