@@ -3,11 +3,12 @@ package vaporware.practica2;
 import java.util.LinkedList;
 
 public class CambioGrafoForward extends Cambio {
+    protected static final int MONEDA_INICIAL = -999;
 
     @Override
     public int[] calcularCambio(int[] monedas, int cambio) {
 
-        Nodo n = algoritmo(monedas, cambio);
+        Nodo n = forward(monedas, cambio);
 
         int[] cantidades = new int[monedas.length];
 
@@ -28,7 +29,7 @@ public class CambioGrafoForward extends Cambio {
         return "grafo forward";
     }
 
-    private Nodo algoritmo(int[] monedas, int cambio) {
+    private Nodo forward(int[] monedas, int cambio) {
         //El primer nodo es del valor de la constante MONEDA_INICIAL
         Nodo primerNodo = new Nodo(MONEDA_INICIAL, 0, cambio, 0);
 

@@ -17,12 +17,23 @@ public class Utilidades {
 
     public static int[] ordenarArray(int[] v) {
         Integer[] boxedArray = Arrays.stream(v).boxed().toArray(Integer[]::new);
+        Arrays.sort(boxedArray);
+        int[] primitive = new int[boxedArray.length];
+        for(int i=0;i<primitive.length;i++){
+            primitive[i]=boxedArray[i].intValue();
+        }
+
+        return primitive;
+    }
+
+    public static int[] ordenarArrayDescendente(int[] v) {
+        Integer[] boxedArray = Arrays.stream(v).boxed().toArray(Integer[]::new);
         Arrays.sort(boxedArray, Collections.reverseOrder());
         int[] primitive = new int[boxedArray.length];
         for(int i=0;i<primitive.length;i++){
             primitive[i]=boxedArray[i].intValue();
         }
-        
+
         return primitive;
     }
 

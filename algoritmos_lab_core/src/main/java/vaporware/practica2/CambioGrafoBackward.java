@@ -3,176 +3,140 @@ package vaporware.practica2;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static vaporware.practica2.Cambio.MONEDA_INICIAL;
-
 public class CambioGrafoBackward extends Cambio {
-
-    public static final int COSTE_INICIAL = 999999;
-    public static final int MAX_VERTICES = 200;
 
     @Override
     public int[] calcularCambio(int[] monedas, int cambio) {
 
-        //Nodo inicial del grafo
-        NodoBackward primerNodo = new NodoBackward(MONEDA_INICIAL, cambio, 0);
 
-        //Generamos el grafo
-        Grafo<NodoBackward, Integer> mapa = generarMapa(primerNodo, monedas, cambio);
+        NodoBackward inicial = new NodoBackward(null);
 
-        //Lista para guardar los nodos visitados
-        ArrayList<NodoBackward> visitados = new ArrayList<>();
 
         //Ejecutamos el algoritmo
-        backward(primerNodo, visitados, mapa);
+        backward(inicial, monedas, 0, cambio);
 
-        //Recorremos la solucion
-        NodoBackward act = primerNodo;
-        int[] output = new int[monedas.length];
-        while (act.getVieneDe() != null) {
-            act = act.getVieneDe();
-            if (act.getMoneda() != MONEDA_INICIAL) {
-                output[act.getMoneda()] += act.getN_monedas();
-            }
+        int[] out = new int[monedas.length];
 
+        for (int i = 0; i < inicial.getMonedas().size(); i++) {
+            out[i] = inicial.getMonedas().get(i);
         }
+        return out;
 
-        //Retornamos la solucion
-        return output;
     }
 
     @Override
     public String getTipo() {
         return "grafo backward";
     }
-    
-    //Adaptado directamente de la diapositiva 34
-    public int backward(NodoBackward estoy, ArrayList<NodoBackward> visitados, Grafo<NodoBackward, Integer> mapa) {
-        visitados.add(estoy);
-        if (!calculado(estoy)) {
-            ArrayList<NodoBackward> ady = mapa.adyacentes(estoy);
-            if (ady.isEmpty()) {
-                estoy.setCoste(0);
-            } else {
-                for (int k = 0; k < ady.size(); k++) {
-                    NodoBackward voy = ady.get(k);
-                    int costo = backward(voy, visitados, mapa);
-                    if (mejor(costo + mapa.peso(estoy, voy), estoy.getCoste())) {
-                        estoy.setCoste(costo + mapa.peso(estoy, voy));
-                        estoy.setVieneDe(voy);
-                    }
+
+    private void backward(NodoBackward nodo, int[] monedas, int etapa, int restante) {
+
+
+        //El caso base es estar en la ultima moneda
+        if (etapa == monedas.length) {
+            //En el caso base los nodos contienen solo lo restante
+            nodo.setRestante(restante);
+
+        } else {
+
+            //Caso recursivo
+
+            //Generamos los hijos del nodo
+            //Suponiendo que restante=4, monedas[2,3], y etapa=1,
+            //n_monedas valdria primero 4 y despues 1.
+            for (int n_monedas = 0; restante - n_monedas * monedas[etapa] >= 0; n_monedas++) {
+
+                //Creamos el hijo correspondiente
+                NodoBackward hijo = new NodoBackward(nodo);
+
+                //Lo ponemos en la lista de hijos del padre
+                nodo.addHijo(hijo);
+                //Recursion
+                backward(hijo, monedas, etapa + 1, restante - n_monedas * monedas[etapa]);
+
+                //Le metemos el numero de monedas gastadas
+                hijo.addMoneda(n_monedas);
+
+                //Comprobamos si esa solucion es mejor que lo que tenemos ahora
+                if (mejorSolucion(hijo, nodo)) {
+                    nodo.setMonedas((LinkedList<Integer>) hijo.getMonedas().clone());
+                    nodo.setRestante(hijo.getRestante());
                 }
             }
         }
 
-        return estoy.getCoste();
     }
 
-    private boolean mejor(int a, int b) {
-        return a < b;
-    }
+    private boolean mejorSolucion(NodoBackward nueva, NodoBackward anterior) {
 
-    public boolean calculado(NodoBackward c) {
-        return c.getCoste() < COSTE_INICIAL;
-    }
-
-    public Grafo<NodoBackward, Integer> generarMapa(NodoBackward primerNodo, int[] monedas, int cambio) {
-
-        Grafo<NodoBackward, Integer> mapa = new Grafo<NodoBackward, Integer>(MAX_VERTICES, true);
-
-        //Para ir guardando los nodos usamos una lista
-        LinkedList<NodoBackward> anchura = new LinkedList<NodoBackward>();
-
-        //Ponemos el primer nodo en la lista
-        anchura.add(primerNodo);
-
-        //Ponemos el primer nodo en el grafo
-        mapa.nuevoVertice(primerNodo);
-
-        while (!anchura.isEmpty()) {
-
-            //Cogemos el primer nodo de la lista
-            NodoBackward padre = anchura.poll();
-
-            //Si queda por devolver mas de 0 y no se han acabado las monedas
-            if (padre.getRestante() > 0 && padre.getMoneda() < monedas.length - 1) {
-
-                //Creamos los nodos hijos
-                for (int n_monedas = 0; n_monedas <= cambio; n_monedas++) {
-
-                    //Asignamos la siguiente moneda
-                    int moneda = padre.getMoneda() + 1;
-
-                    //Salvo que sea la inicial que entonces es la 0
-                    if (padre.getMoneda() == MONEDA_INICIAL) {
-                        moneda = 0;
-                    }
-
-                    //Calculamos el cambio restante
-                    int restante = padre.getRestante() - n_monedas * monedas[moneda];
-
-                    //Si el restante es mayor o igual que cero el nodo es valido
-                    if (restante >= 0) {
-
-                        //Creamos el nodo y lo añadimos al grafo
-                        NodoBackward hijo = new NodoBackward(moneda, restante, n_monedas);
-                        anchura.add(hijo);
-                        mapa.nuevoVertice(hijo);
-
-                        //Creamos el arco correspondiente
-                        int coste_arco = Math.abs(cambio - (hijo.getN_monedas() * monedas[hijo.getMoneda()]) - (hijo.getN_monedas()));
-                        mapa.nuevoArco(padre, hijo, coste_arco);
-
-                    }
-
-                }
-
-            }
-
+        //Si la anterior es vacia o la nueva tiene menos restante, la nueva es mejor
+        if (anterior.getMonedas().isEmpty() || nueva.getRestante() < anterior.getRestante()) {
+            return true;
         }
-        return mapa;
+
+        //Contamos las monedas usadas
+        int monedasNueva = 0;
+        int monedasAnterior = 0;
+        for (int i = 0; i < nueva.getMonedas().size(); i++) {
+            monedasNueva += nueva.getMonedas().get(i);
+        }
+
+        for (int i = 0; i < anterior.getMonedas().size(); i++) {
+            monedasAnterior += anterior.getMonedas().get(i);
+        }
+
+        //Si la nueva ha usado un menor numero de monedas, es mejor
+        if (monedasNueva < monedasAnterior) {
+            return true;
+        }
+
+        //En otro caso, false
+        return false;
+
     }
 
     private class NodoBackward {
+        private ArrayList<NodoBackward> hijos = new ArrayList<NodoBackward>();
+        private NodoBackward padre = null;
 
-        private int moneda;
+        private LinkedList<Integer> monedas = new LinkedList<>();
+
         private int restante;
-        private int n_monedas;
-        private NodoBackward vieneDe;
-        private int coste = COSTE_INICIAL;
 
-        public NodoBackward(int moneda, int restante, int n_monedas) {
-            this.moneda = moneda;
-            this.restante = restante;
-            this.n_monedas = n_monedas;
-        }
+        public NodoBackward(NodoBackward padre) {
+            this.padre = padre;
 
-        public NodoBackward getVieneDe() {
-            return vieneDe;
-        }
-
-        public void setVieneDe(NodoBackward vieneDe) {
-            this.vieneDe = vieneDe;
-        }
-
-        public int getMoneda() {
-            return moneda;
-        }
-
-        public int getN_monedas() {
-            return n_monedas;
         }
 
         public int getRestante() {
             return restante;
         }
 
-        public int getCoste() {
-            return coste;
+        public void setRestante(int restante) {
+            this.restante = restante;
         }
 
-        public void setCoste(int coste) {
-            this.coste = coste;
+        public void addHijo(NodoBackward hijo) {
+            hijos.add(hijo);
         }
+
+        public ArrayList<NodoBackward> getHijos() {
+            return hijos;
+        }
+
+        public void addMoneda(int moneda) {
+            this.monedas.addFirst(moneda);
+
+        }
+
+        public void setMonedas(LinkedList<Integer> monedas) {
+            this.monedas = monedas;
+        }
+
+        public LinkedList<Integer> getMonedas() {
+            return monedas;
+        }
+
 
     }
 }

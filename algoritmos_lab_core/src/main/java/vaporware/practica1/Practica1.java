@@ -57,4 +57,9 @@ public class Practica1 implements Practica {
 
 
     }
+
+    @Override
+    public String nombrePractica() {
+        return "Calculo del numero combinatorio";
+    }
 }
