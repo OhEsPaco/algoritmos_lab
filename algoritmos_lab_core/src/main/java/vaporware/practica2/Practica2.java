@@ -9,10 +9,10 @@ public class Practica2 implements Practica {
         
        // int[] monedas = IO.pedirEnteros("Introduce las monedas separadas por espacios:", "La entrada es erronea, prueba otra vez.");
       //  int cambio = IO.pedirEntero("Introduce el cambio", "Eso no es un entero, prueba otra vez:");
-        int []monedas={2,3,5};
-        int cambio=20;
+        int []monedas={1,2,5};
+        int cambio=15;
         //Cambio[] cambios = {new CambioGrafoForward(), new CambioGrafoBackward(),new CambioMatrizForward(), new CambioMatrizBackward()};
-        Cambio[] cambios = {new CambioMatrizForward()};
+        Cambio[] cambios = {new CambioMatrizBackward()};
 
         for (Cambio c : cambios) {
             

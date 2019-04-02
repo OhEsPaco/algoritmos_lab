@@ -6,12 +6,14 @@ public class CambioMatrizBackward extends Cambio {
 
     @Override
     public int[] calcularCambio(int[] monedas, int cambio) {
+        //Creamos una matriz con con una fila mas que el cambio y una columna mas que monedas
         LinkedList<Integer>[][] matriz = new LinkedList[cambio + 1][monedas.length + 1];
-//la ultima columna la reservamos para saber lo que dejamos de devolver. Lo ideal es 0
+
+        //Ejecutamos el algoritmo
         backward(matriz, monedas, cambio, 0);
 
+        //Cogemos la solucion. Esta en la esquina inferior izquierda
         int[] output = new int[monedas.length];
-
         for (int i = 0; i < monedas.length; i++) {
             output[i] = matriz[cambio][0].get(i);
         }
@@ -24,18 +26,41 @@ public class CambioMatrizBackward extends Cambio {
         return "matriz backward";
     }
 
-    private void backward(LinkedList<Integer>[][] matriz, int[] monedas, int fil, int col) {
-        if (matriz[fil][col] == null) {//no calculado
-            matriz[fil][col] = new LinkedList<Integer>();
-            if (col == monedas.length) {
-                matriz[fil][col].add(fil);//caso base. Le asignamos lo que queda por devolver
+    private void backward(LinkedList<Integer>[][] matriz, int[] monedas, int fila, int columna) {
+
+        //Si ya hemos pasado por aqui lo ignoramos
+        if (matriz[fila][columna] == null) {
+
+            //Como es null primero tenemos que inicializarlo
+            matriz[fila][columna] = new LinkedList<Integer>();
+
+            //El caso base es estar en la ultima columna
+            if (columna == monedas.length) {
+
+                //En el caso base la lista contiene lo que falta por devolver
+                matriz[fila][columna].add(fila);
+
             } else {
-                for (int numMon = 0; fil - numMon * monedas[col] >= 0; numMon++) {
-                    backward(matriz, monedas, fil - numMon * monedas[col], col + 1);
-                    LinkedList<Integer> nueva = (LinkedList<Integer>) matriz[fil - numMon * monedas[col]][col + 1].clone();
-                    nueva.addFirst(numMon);
-                    if (mejorB(nueva, matriz[fil][col])) {
-                        matriz[fil][col] = nueva;
+
+                //Caso recursivo
+
+                //La fila representa lo que queda por devolver
+                //Asi que suponiendo que fila=4, monedas[2,3], y columna=1,
+                //n_monedas valdria primero 4 y despues 1.
+                for (int n_monedas = 0; fila - n_monedas * monedas[columna] >= 0; n_monedas++) {
+
+                    //Recursion
+                    backward(matriz, monedas, fila - n_monedas * monedas[columna], columna + 1);
+
+                    //Copiamos el calculado en la recursion
+                    LinkedList<Integer> nueva = (LinkedList<Integer>) matriz[fila - n_monedas * monedas[columna]][columna + 1].clone();
+
+                    //Le metemos el numero de monedas gastadas
+                    nueva.addFirst(n_monedas);
+
+                    //Comprobamos si esa solucion es mejor que lo que tenemos ahora
+                    if (mejorSolucion(nueva, matriz[fila][columna])) {
+                        matriz[fila][columna] = nueva;
                     }
                 }
             }
@@ -43,31 +68,32 @@ public class CambioMatrizBackward extends Cambio {
         }
     }
 
-    private boolean mejorB(LinkedList<Integer> nueva, LinkedList<Integer> vieja) {
-        boolean mejor = (vieja.isEmpty() || nueva.getLast() < vieja.getLast());
-        if (!mejor && nueva.getLast() == vieja.getLast()) {
-            Integer n = nueva.getLast();
-            Integer v = vieja.getLast();
-            nueva.removeLast();
-            vieja.removeLast();//quito la ultima que es lo que dejo de devolver
-            mejor = mejor(nueva, vieja);
-            nueva.addLast(n);
-            vieja.addLast(v);//las dejo como estaban
+    private boolean mejorSolucion(LinkedList<Integer> nueva, LinkedList<Integer> anterior) {
+
+        //Si la anterior es vacia o la nueva tiene menos restante, la nueva es mejor
+        if(anterior.isEmpty() || nueva.getLast() < anterior.getLast()){
+            return true;
         }
-        return mejor;
 
-    }
-
-    private boolean mejor(LinkedList<Integer> a, LinkedList<Integer> b) {
-        return hayMonedas(a) < hayMonedas(b);
-    }
-
-    public int hayMonedas(LinkedList<Integer> a) {
-        int h = 0;
-        for (int n = 0; n < a.size(); n++) {
-            h = h + a.get(n);
+        //Contamos las monedas usadas
+        int monedasNueva=0;
+        int monedasAnterior=0;
+        for(int i=0;i<nueva.size()-1;i++){
+            monedasNueva+=nueva.get(i);
         }
-        return h;
+
+        for(int i=0;i<anterior.size()-1;i++){
+            monedasAnterior+=anterior.get(i);
+        }
+
+        //Si la nueva ha usado un menor numero de monedas, es mejor
+        if(monedasNueva<monedasAnterior){
+            return true;
+        }
+
+        //En otro caso, false
+        return false;
+
     }
 
 }

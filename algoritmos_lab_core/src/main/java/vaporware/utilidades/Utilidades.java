@@ -2,6 +2,7 @@ package vaporware.utilidades;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 
 public class Utilidades {
 
@@ -23,5 +24,15 @@ public class Utilidades {
         }
         
         return primitive;
+    }
+
+    public static void printM(LinkedList<Integer>[][] matriz) {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                System.out.format("%15s", matriz[i][j]);
+            }
+            System.out.println();
+        }
+
     }
 }

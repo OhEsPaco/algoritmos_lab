@@ -31,15 +31,6 @@ public class CambioMatrizForward extends Cambio {
         return "matriz forward";
     }
 
-    private void printM(LinkedList<Integer>[][] matriz) {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[i].length; j++) {
-                System.out.format("%15s", matriz[i][j]);
-            }
-            System.out.println();
-        }
-
-    }
 
     public void forward(LinkedList<Integer>[][] matriz, int[] monedas, int cambio) {
 
