@@ -14,4 +14,5 @@ public abstract class Combinatorio {
 
     //Metodo que devuelve el tipo de algoritmo
     public abstract String getTipo();
+
 }

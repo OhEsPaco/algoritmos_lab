@@ -7,12 +7,40 @@ import vaporware.utilidades.ReporteEmpirico;
 import java.math.BigInteger;
 
 public class Practica1 implements Practica {
+
+        /*RESULTADOS
+
+    n=2020 k=202
+    it=16ms
+    pila=no termina
+    rec=no termina
+
+    n=30, k=15
+    it=0ms
+    pila=22451ms
+    rec=9499ms
+
+    n=20, k=5
+    it=0ms
+    pila=16ms
+    rec=0ms
+
+    n=10, k=5
+    it=0ms
+    pila=0ms
+    rec=0ms
+
+    El metodo iterativo es muy rapido en cualquier situacion. El recursivo es mas
+    rapido normalmete que el de pila, aunque se vuelven tiempos infinitos a la vez.
+     */
+
+
     @Override
     public void ejecutar() {
         System.out.println("-----Ejecutando practica 1-----");
 
         int n, k;
-        Combinatorio[] experimentos = {new CombinatorioIterativo(), new CombinatorioRecursivo(), new CombinatorioPila()};
+        Combinatorio[] experimentos = {new CombinatorioIterativo(),new CombinatorioPila(), new CombinatorioRecursivo()};
         ReporteEmpirico reporte = new ReporteEmpirico();
 
         //Pedimos n y k
