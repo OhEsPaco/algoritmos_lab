@@ -8,7 +8,7 @@ public class CambioGrafoForward extends Cambio {
     @Override
     public int[] calcularCambio(int[] monedas, int cambio) {
 
-        Nodo n = forward(monedas, cambio);
+        NodoForward n = forward(monedas, cambio);
 
         int[] cantidades = new int[monedas.length];
 
@@ -29,15 +29,15 @@ public class CambioGrafoForward extends Cambio {
         return "grafo forward";
     }
 
-    private Nodo forward(int[] monedas, int cambio) {
+    private NodoForward forward(int[] monedas, int cambio) {
         //El primer nodo es del valor de la constante MONEDA_INICIAL
-        Nodo primerNodo = new Nodo(MONEDA_INICIAL, 0, cambio, 0);
+        NodoForward primerNodo = new NodoForward(MONEDA_INICIAL, 0, cambio, 0);
 
         //Para hacer el recorrido en anchura usamos una lista
-        LinkedList<Nodo> anchura = new LinkedList<Nodo>();
+        LinkedList<NodoForward> anchura = new LinkedList<NodoForward>();
 
-        //Nodo solucion
-        Nodo solucion = primerNodo;
+        //NodoForward solucion
+        NodoForward solucion = primerNodo;
 
         //Ponemos el primer nodo en la lista
         anchura.add(primerNodo);
@@ -45,7 +45,7 @@ public class CambioGrafoForward extends Cambio {
         while (!anchura.isEmpty()) {
 
             //Cogemos el primer nodo de la lista
-            Nodo padre = anchura.poll();
+            NodoForward padre = anchura.poll();
 
             //Si queda por devolver mas de 0 y no se han acabado las monedas
             if (padre.getRestante() > 0 && padre.getMoneda() < monedas.length - 1) {
@@ -71,13 +71,27 @@ public class CambioGrafoForward extends Cambio {
                         int coste = n_monedas + padre.getCoste();
 
                         //Generamos un nodo nuevo
-                        Nodo hijo = new Nodo(moneda, coste, restante, n_monedas);
+                        NodoForward hijo = new NodoForward(moneda, coste, restante, n_monedas);
                         hijo.setPadre(padre);
 
-                        //Ponemos el nodo en la lista
-                        if (!anchura.contains(hijo)) {
+                        //¿Hay un nodo con la misma moneda y restante?
+                        if (anchura.contains(hijo)) {
+                            //Si lo contiene, lo cogemos
+                            NodoForward anterior = anchura.get(anchura.indexOf(hijo));
+
+                            //¿Es mejor solucion el nuevo nodo?
+                            if (hijo.getCoste() < anterior.getCoste()) {
+                                anterior.setPadre(hijo.getPadre());
+                                anterior.setCantidad(hijo.getCantidad());
+                                anterior.setCoste(hijo.getCoste());
+                                anterior.setMoneda(hijo.getMoneda());
+                            }
+
+                        } else {
+                            //Ponemos el nodo en la lista
                             anchura.add(hijo);
                         }
+
 
                         //Si es mejor que la solucion actual lo marcamos como solucion
                         if (esMejor(hijo, solucion)) {
@@ -94,7 +108,7 @@ public class CambioGrafoForward extends Cambio {
         return solucion;
     }
 
-    private boolean esMejor(Nodo hijo, Nodo solucion) {
+    private boolean esMejor(NodoForward hijo, NodoForward solucion) {
         /*
             Si ninguno tiene restante 0, el mejor es el de
             menos restante.
@@ -127,12 +141,12 @@ public class CambioGrafoForward extends Cambio {
 
     }
 
-    private class Nodo {
+    private class NodoForward {
 
         //Valor de la moneda que ha generado el nodo
         private int moneda;
 
-        //Coste del nodo
+        //Coste del nodo (monedas gastadas a lo largo de la solucion)
         private int coste;
 
         //Cambio restante
@@ -141,20 +155,28 @@ public class CambioGrafoForward extends Cambio {
         //Cantidad de monedas usadas en este nodo
         private int cantidad;
 
-        private Nodo padre = null;
+        private NodoForward padre = null;
 
-        public Nodo(int moneda, int coste, int restante, int cantidad) {
+        public NodoForward(int moneda, int coste, int restante, int cantidad) {
             this.moneda = moneda;
             this.coste = coste;
             this.restante = restante;
             this.cantidad = cantidad;
         }
 
-        public Nodo getPadre() {
+        public void setCoste(int coste) {
+            this.coste = coste;
+        }
+
+        public NodoForward getPadre() {
             return padre;
         }
 
-        public void setPadre(Nodo padre) {
+        public void setCantidad(int cantidad) {
+            this.cantidad = cantidad;
+        }
+
+        public void setPadre(NodoForward padre) {
             this.padre = padre;
         }
 
@@ -174,6 +196,31 @@ public class CambioGrafoForward extends Cambio {
             return cantidad;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            //Para el uso que le voy a dar me basta con saber si el restante es el mismo
+            if (o == this) {
+                return true;
+            }
+
+            if (!(o instanceof NodoForward)) {
+                return false;
+            }
+
+            NodoForward c = (NodoForward) o;
+
+            if (this.restante == c.getRestante()) {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void setMoneda(int moneda) {
+            this.moneda = moneda;
+        }
     }
 
 }
+
+

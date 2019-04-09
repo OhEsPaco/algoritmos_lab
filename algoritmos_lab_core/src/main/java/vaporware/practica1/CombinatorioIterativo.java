@@ -1,3 +1,5 @@
+/*He usado BigIntegers en vez de int ya que se generan numeros muy grandes
+* muy rapido*/
 package vaporware.practica1;
 
 import java.math.BigInteger;

@@ -2,13 +2,16 @@ package vaporware.practica1;
 
 import vaporware.Practica;
 import vaporware.utilidades.IO;
-import vaporware.utilidades.ReporteEmpirico;
 
 import java.math.BigInteger;
 
 public class Practica1 implements Practica {
 
         /*RESULTADOS
+    n=20202 k=202
+    it=328ms
+    pila=no termina
+    rec=no termina
 
     n=2020 k=202
     it=16ms
@@ -40,8 +43,7 @@ public class Practica1 implements Practica {
         System.out.println("-----Ejecutando practica 1-----");
 
         int n, k;
-        Combinatorio[] experimentos = {new CombinatorioIterativo(),new CombinatorioPila(), new CombinatorioRecursivo()};
-        ReporteEmpirico reporte = new ReporteEmpirico();
+        Combinatorio[] experimentos = {new CombinatorioIterativo(), new CombinatorioPila(), new CombinatorioRecursivo()};
 
         //Pedimos n y k
         do {
@@ -55,31 +57,29 @@ public class Practica1 implements Practica {
 
         //Ejecucion de los algoritmos
         for (Combinatorio comb : experimentos) {
+
             System.out.println("[Ejecutando " + comb.getTipo() + "]");
 
             //Iniciamos el test
-            reporte.runTest();
+            long end_time = 0;
+            long start_time = System.currentTimeMillis();
             try {
                 //Ejecutamos el algoritmo
                 BigInteger resultado = comb.calcularCombinatorio(n, k);
 
                 //Paramos el test antes de imprimir la informacion
-                reporte.runTest();
+                end_time = System.currentTimeMillis();
 
                 //Imprimimos resultados
                 System.out.println("El resultado es: " + resultado);
-                System.out.println("Se han tardado " + reporte.toString() + "\n");
+                System.out.println("Se han tardado " + (end_time - start_time) + " milisegundos\n");
 
             } catch (java.lang.StackOverflowError | Exception a) {
                 //Si hay una excepcion mostramos el tiempo que ha estado ejecutandose hasta el fallo
-                reporte.runTest();
+                end_time = System.currentTimeMillis();
                 System.out.println("El algoritmo " + comb.getTipo() + " ha fallado.");
-                System.out.println("Se ha ejecutado durante " + reporte.toString() + " hasta el fallo\n");
-            } finally {
-                //Reset al reporte para las siguientes iteraciones
-                reporte.reset();
+                System.out.println("Se ha ejecutado " + (end_time - start_time) + " milisegundos hasta el fallo\n");
             }
-
 
         }
 

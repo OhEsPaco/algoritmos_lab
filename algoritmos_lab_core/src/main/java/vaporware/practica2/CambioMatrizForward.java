@@ -54,30 +54,24 @@ public class CambioMatrizForward extends Cambio {
                     //por el 0.
                     for (int n_monedas = 0; fila - n_monedas * monedas[columna] >= 0; n_monedas++) {
 
-                        mirarHaciaDelante(fila, columna, n_monedas, matriz, monedas);
+                        //Si el numero de monedas es 0, será la misma que en la que estamos.
+                        //Si no, sera mas arriba.
+                        int filaDelante = fila - n_monedas * monedas[columna];
+
+                        //Clonamos la lista donde estamos
+                        LinkedList<Integer> nueva = (LinkedList<Integer>) matriz[fila][columna].clone();
+
+                        //Le ponemos la nueva moneda por el final
+                        nueva.addLast(n_monedas);
+
+                        //Si la siguiente es null o es mejor opcion que lo que hay la reemplazamos
+                        if (matriz[filaDelante][columna + 1] == null || monedasUsadas(nueva) < monedasUsadas(matriz[filaDelante][columna + 1])) {
+                            matriz[filaDelante][columna + 1] = nueva;
+                        }
 
                     }
                 }
             }
-        }
-    }
-
-    private void mirarHaciaDelante(int fila, int columna, int n_monedas, LinkedList<Integer>[][] matriz, int[] monedas) {
-
-        //Calculamos la fila de delante.
-        //Si el numero de monedas es 0, será la misma que en la que estamos.
-        //Si no, sera mas arriba.
-        int filaDelante = fila - n_monedas * monedas[columna];
-
-        //Clonamos la lista donde estamos
-        LinkedList<Integer> nueva = (LinkedList<Integer>) matriz[fila][columna].clone();
-
-        //Le ponemos la nueva moneda por el final
-        nueva.addLast(n_monedas);
-
-        //Si la siguiente es null o es mejor opcion que lo que hay la reemplazamos
-        if (matriz[filaDelante][columna + 1] == null || monedasUsadas(nueva) < monedasUsadas(matriz[filaDelante][columna + 1])) {
-            matriz[filaDelante][columna + 1] = nueva;
         }
     }
 

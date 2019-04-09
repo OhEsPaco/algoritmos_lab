@@ -1,7 +1,6 @@
 package vaporware;
 
 import vaporware.practica1.Practica1;
-import vaporware.practica2.CambioGrafoForward;
 import vaporware.practica2.Practica2;
 import vaporware.utilidades.IO;
 
