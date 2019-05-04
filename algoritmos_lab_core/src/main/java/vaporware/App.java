@@ -2,13 +2,15 @@ package vaporware;
 
 import vaporware.practica1.Practica1;
 import vaporware.practica2.Practica2;
+import vaporware.practica3.Practica3;
 import vaporware.utilidades.IO;
 
 public class App {
     public static void main(String[] args) {
+        Practica3 p=new Practica3();
+        p.ejecutar();
 
-
-        Practica[] practicas = {new Practica1(), new Practica2()};
+       /* Practica[] practicas = {new Practica1(), new Practica2()};
 
         do {
             int opcion = generarMenu(practicas);
@@ -21,7 +23,7 @@ public class App {
                 System.out.println("Opcion incorrecta");
             }
 
-        } while (true);
+        } while (true);*/
 
     }
 
