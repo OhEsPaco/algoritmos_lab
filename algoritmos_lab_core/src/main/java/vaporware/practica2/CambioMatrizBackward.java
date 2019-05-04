@@ -1,5 +1,7 @@
 package vaporware.practica2;
 
+import vaporware.utilidades.Utilidades;
+
 import java.util.LinkedList;
 
 public class CambioMatrizBackward extends Cambio {
@@ -39,6 +41,8 @@ public class CambioMatrizBackward extends Cambio {
 
                 //En el caso base la lista contiene lo que falta por devolver
                 matriz[fila][columna].add(fila);
+                Utilidades.printM(matriz);
+                System.out.println();
 
             } else {
 
@@ -61,6 +65,8 @@ public class CambioMatrizBackward extends Cambio {
                     //Comprobamos si esa solucion es mejor que lo que tenemos ahora
                     if (mejorSolucion(nueva, matriz[fila][columna])) {
                         matriz[fila][columna] = nueva;
+                        Utilidades.printM(matriz);
+                        System.out.println();
                     }
                 }
             }

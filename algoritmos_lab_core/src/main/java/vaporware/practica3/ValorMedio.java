@@ -1,8 +1,8 @@
 package vaporware.practica3;
 
 public class ValorMedio {
-    double r=10;
-    double h=5;
+    double r=5;
+    double h=10;
 
     public double[] volumenVm(int repes) {
         double[] resultados = new double[3];//0 intervaloconfianza[0] 1 intervaloconfianza[1] 2 resultado

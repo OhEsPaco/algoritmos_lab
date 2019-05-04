@@ -8,7 +8,7 @@ public class Practica3 implements Practica {
         ValorMedio v=new ValorMedio();
        // double[] vm=v.volumenVm(200);
       //  System.out.println("   VolumenVM...."+vm[2]+ " ["+vm[0]+" ; "+vm[1]+"}  Volumen Real="+v.volumenReal());
-        System.out.println(v.funcion(3,3));
+        System.out.println(v.funcion(4,2));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package vaporware.utilidades;
 
+import java.io.*;
 import java.util.Scanner;
 
 public class IO {
@@ -31,7 +32,7 @@ public class IO {
         do {
 
             String split = sc.nextLine();
-            String[]splited=split.split("\\s+");
+            String[] splited = split.split("\\s+");
             salida = new int[splited.length];
 
             try {
@@ -42,13 +43,25 @@ public class IO {
                 }
                 continuar = false;
             } catch (Exception e) {
-                 
+
                 System.out.println(error);
             }
 
         } while (continuar);
 
         return Utilidades.ordenarArray(salida);
+    }
+
+    public static String leerArchivo(String archivo) throws IOException {
+        InputStream is = new FileInputStream(archivo);
+        BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+        String line = buf.readLine();
+        StringBuilder sb = new StringBuilder();
+        while (line != null) {
+            sb.append(line).append("\n");
+            line = buf.readLine();
+        }
+        return sb.toString();
     }
 
 }
