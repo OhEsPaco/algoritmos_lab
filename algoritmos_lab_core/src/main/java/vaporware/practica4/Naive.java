@@ -1,27 +1,36 @@
 package vaporware.practica4;
 
+import vaporware.utilidades.IO;
+
+import java.io.IOException;
+
 public class Naive {
-    public static int naive(String patron, String texto) {
-        int ocurrencias = 0;
+
+    public static int ejecutar(String archivo, String patron) throws IOException {
+        return naive(IO.leerArchivo(archivo),patron);
+    }
+
+    private static int naive(String texto,String patron) {
+        int aciertos = 0;
         if (patron.length() > 0 && texto.length() >= patron.length()) {
-            int t = 0;//desplazamiento en el texto
-            int p = 0;//desplazamiento en el patron
-            while (texto.length() - t >= patron.length()) {
-                if (texto.charAt(t) == patron.charAt(p)) {//busqueda
-                    int T = t + 1;
-                    int P = 1;
-                    while (P < patron.length() && texto.charAt(T) == patron.charAt(P)) {
-                        T++;
-                        P++;
+
+            for(int posicionTexto=0;texto.length() - posicionTexto >= patron.length();posicionTexto++){
+
+                if (texto.charAt(posicionTexto) == patron.charAt(0)) {
+                    int caracteresIguales = 1;
+                    for(int posicionEnPatron=1;posicionEnPatron<patron.length();posicionEnPatron++){
+                        if(texto.charAt(posicionEnPatron+posicionTexto)==patron.charAt(posicionEnPatron)){
+                            caracteresIguales++;
+                        }
                     }
-                    if (P == patron.length()) {
-                        ocurrencias++;
+                    if (caracteresIguales == patron.length()) {
+                        aciertos++;
                     }
                 }
-                t++;
+
             }
         }
-        return ocurrencias;
+        return aciertos;
     }
 
 }

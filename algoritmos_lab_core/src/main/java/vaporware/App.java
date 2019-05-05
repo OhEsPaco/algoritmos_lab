@@ -3,11 +3,12 @@ package vaporware;
 import vaporware.practica1.Practica1;
 import vaporware.practica2.Practica2;
 import vaporware.practica3.Practica3;
+import vaporware.practica4.Practica4;
 import vaporware.utilidades.IO;
 
 public class App {
     public static void main(String[] args) {
-        Practica3 p=new Practica3();
+        Practica4 p=new Practica4();
         p.ejecutar();
 
        /* Practica[] practicas = {new Practica1(), new Practica2()};

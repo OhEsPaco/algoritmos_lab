@@ -6,21 +6,32 @@ import java.io.IOException;
 
 public class KarpRabin {
 
-    public static int ejecutar(String archivo, String patron) throws IOException {
-        return algoritmo(patron, IO.leerArchivo(archivo));
+    public static int ejecutar(String archivo, String patron, int porcentaje) throws IOException {
+        String texto=IO.leerArchivo(archivo);
+
+        if(porcentaje>100){
+            porcentaje=100;
+        }else if(porcentaje<0){
+            porcentaje=20;
+        }
+        int longitud=Math.round((porcentaje/100f)*texto.length());
+        return algoritmo(patron, texto, longitud);
     }
 
-    private static int algoritmo(String patron, String texto) {
-        int m = patron.length();
-        int ocurrencias=0;
-        for (int n = 0; n <= texto.length() - m; n++) {
-            String aux = texto.substring(n, n + m);
-            if (aux.hashCode() == patron.hashCode() && aux.equals(patron)){
-                ocurrencias++;
+    private static int algoritmo(String patron, String texto, int longitud) {
+        int longitudPatron = patron.length();
+        int aciertos = 0;
+        for (int posicionTexto = 0; posicionTexto <= longitud - longitudPatron; posicionTexto++) {
+            String cadenaPosible = texto.substring(posicionTexto, posicionTexto + longitudPatron);
+            if (cadenaPosible.hashCode() == patron.hashCode()) {
+                if (cadenaPosible.equals(patron)) {
+                    aciertos++;
+                }
+
             }
         }
 
-        return ocurrencias;
+        return aciertos;
     }
 
 }
