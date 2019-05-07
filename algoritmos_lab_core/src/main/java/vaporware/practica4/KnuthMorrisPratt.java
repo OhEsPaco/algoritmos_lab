@@ -1,15 +1,18 @@
 package vaporware.practica4;
 
-import vaporware.utilidades.IO;
 
-import java.io.IOException;
-
-public class KnutMorrisPratt {
+public class KnuthMorrisPratt {
 
 
-    public static int ejecutar(String texto, String patron) throws IOException {
+    public static int ejecutar(String texto, String patron) {
+        int ocurrencias = 0;
+        if (patron.length() > 0 && texto.length() >= patron.length()) {
 
-        return knuthMorrisPrat(texto, patron);
+            int[] fallo = preproceso(patron);
+            ocurrencias = algoritmo(patron, texto, fallo);
+        }
+        return ocurrencias;
+
     }
 
     public static int algoritmo(String patron, String texto, int[] fallo) {
@@ -17,6 +20,8 @@ public class KnutMorrisPratt {
         int aciertos = 0;
         int posicionTexto = 0;
         int posicionEnPatron = 0;
+
+        //Recorremos el texto de
         while (texto.length() - posicionTexto >= patron.length()) {
             if (posicionEnPatron == patron.length()) {
                 aciertos++;
@@ -27,47 +32,37 @@ public class KnutMorrisPratt {
                     posicionEnPatron++;
                 } else {
                     posicionTexto = posicionTexto + posicionEnPatron - fallo[posicionEnPatron];
-                    if (posicionEnPatron > 0){
+                    if (posicionEnPatron > 0) {
                         posicionEnPatron = fallo[posicionEnPatron];
                     }
                 }
             }
         }
+
         return aciertos;
     }
 
+
     public static int[] preproceso(String patron) {
         int[] fallo = new int[patron.length()];
-        int i = 2;
         int j = 0;
         fallo[0] = -1;
-        if (patron.length() > 1) {
-            fallo[1] = 0;
-            while (i < patron.length()) {
-                if (patron.charAt(i - 1) == patron.charAt(j)) {
-                    j++;
-                    fallo[i] = j;
-                    i++;
+        for (int i = 2; i < patron.length() && patron.length() > 1; ) {
+            if (patron.charAt(i - 1) == patron.charAt(j)) {
+                j++;
+                fallo[i] = j;
+                i++;
+            } else {
+                if (j > 0) {
+                    j = fallo[j];
                 } else {
-                    if (j > 0) j = fallo[j];
-                    else {
-                        fallo[i] = 0;
-                        i++;
-                    }
+                    fallo[i] = 0;
+                    i++;
                 }
             }
         }
         return fallo;
     }
 
-    public static int knuthMorrisPrat(String texto, String patron) {
-        int ocurrencias = 0;
-        if (patron.length() > 0 && texto.length() >= patron.length()) {
-            int[] fallo;
-            fallo = preproceso(patron);
-            ocurrencias = algoritmo(patron, texto, fallo);
-        }
-        return ocurrencias;
-    }
 
 }

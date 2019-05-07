@@ -1,37 +1,34 @@
 package vaporware.practica4;
 
-import vaporware.utilidades.IO;
-
-import java.io.IOException;
-
 public class Naive {
 
-    public static int ejecutar(String texto, String patron) throws IOException {
-
-
-        return naive(texto,patron);
+    public static int ejecutar(String texto, String patron) {
+        return algoritmo(texto, patron);
     }
 
-    private static int naive(String texto,String patron) {
+    private static int algoritmo(String texto, String patron) {
         int aciertos = 0;
-        if (patron.length() > 0 && texto.length() >= patron.length()) {
 
-            for(int posicionTexto=0;texto.length() - posicionTexto >= patron.length();posicionTexto++){
+        //Recorremos el texto de izquierda a derecha
+        for (int posicionTexto = 0; texto.length() - posicionTexto >= patron.length(); posicionTexto++) {
 
-                if (texto.charAt(posicionTexto) == patron.charAt(0)) {
-                    int caracteresIguales = 1;
-                    for(int posicionEnPatron=1;posicionEnPatron<patron.length();posicionEnPatron++){
-                        if(texto.charAt(posicionEnPatron+posicionTexto)==patron.charAt(posicionEnPatron)){
-                            caracteresIguales++;
-                        }
-                    }
-                    if (caracteresIguales == patron.length()) {
-                        aciertos++;
+            //Si el caracter es igual al primero del patron pasamos a analizar el resto
+            if (texto.charAt(posicionTexto) == patron.charAt(0)) {
+                int caracteresIguales = 1;
+                for (int posicionEnPatron = 1; posicionEnPatron < patron.length(); posicionEnPatron++) {
+                    if (texto.charAt(posicionEnPatron + posicionTexto) == patron.charAt(posicionEnPatron)) {
+                        caracteresIguales++;
                     }
                 }
-
+                //Si el numero de caracteres iguales es el mismo que la longitud del patron
+                //es que hemos encontrado un acierto
+                if (caracteresIguales == patron.length()) {
+                    aciertos++;
+                }
             }
+
         }
+
         return aciertos;
     }
 

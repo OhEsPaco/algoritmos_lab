@@ -1,28 +1,37 @@
 package vaporware.practica4;
 
-import vaporware.utilidades.IO;
-
-import java.io.IOException;
 
 public class KarpRabin {
 
-    public static int ejecutar(String archivo, String patron) throws IOException {
-
+    public static int ejecutar(String archivo, String patron) {
         return algoritmo(patron, archivo);
     }
 
     private static int algoritmo(String patron, String texto) {
         int longitudPatron = patron.length();
         int aciertos = 0;
-        for (int posicionTexto = 0; posicionTexto <= texto.length() - longitudPatron; posicionTexto++) {
-            String cadenaPosible = texto.substring(posicionTexto, posicionTexto + longitudPatron);
-            if (cadenaPosible.hashCode() == patron.hashCode()) {
-                if (cadenaPosible.equals(patron)) {
-                    aciertos++;
-                }
 
+
+            //Recorremos el texto de izquierda a derecha
+            for (int posicionTexto = 0; posicionTexto <= texto.length() - longitudPatron; posicionTexto++) {
+
+                //Tomamos la cadena entre la posicion actual y la longitud del patron
+                String cadenaPosible = texto.substring(posicionTexto, posicionTexto + longitudPatron);
+
+                //Si los hashes son iguales tenemos un posible acierto
+                if (cadenaPosible.hashCode() == patron.hashCode()) {
+
+                    //Comprobamos que la cadena posible sea igual que el patron
+                    if (cadenaPosible.equals(patron)) {
+
+                        //Hemos encontrado el patron
+                        aciertos++;
+                    }
+
+                }
             }
-        }
+
+
 
         return aciertos;
     }
