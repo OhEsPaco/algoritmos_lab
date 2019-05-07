@@ -14,14 +14,7 @@ public class Practica4 implements Practica {
     @Override
     public void ejecutar() {
 
-
-    int[]fallo=KnuthMorrisPratt.preproceso("abcab");
-
-    for(int i:fallo){
-        System.out.print(i+" ");
-    }
-        System.out.println();
-       /* try {
+        try {
             int ocurrencias = 0;
 
             String nombreTexto = IO.pedirString("Archivo a analizar:", "Esto no es un String");
@@ -69,7 +62,7 @@ public class Practica4 implements Practica {
 
         } catch (IOException e) {
             System.out.println("Texto no encontrado");
-        }*/
+        }
     }
 
     @Override
