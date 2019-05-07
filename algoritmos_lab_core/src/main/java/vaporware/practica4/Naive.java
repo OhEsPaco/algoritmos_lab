@@ -6,8 +6,10 @@ import java.io.IOException;
 
 public class Naive {
 
-    public static int ejecutar(String archivo, String patron) throws IOException {
-        return naive(IO.leerArchivo(archivo),patron);
+    public static int ejecutar(String texto, String patron) throws IOException {
+
+
+        return naive(texto,patron);
     }
 
     private static int naive(String texto,String patron) {

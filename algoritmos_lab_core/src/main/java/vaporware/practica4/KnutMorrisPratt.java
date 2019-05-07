@@ -7,8 +7,9 @@ import java.io.IOException;
 public class KnutMorrisPratt {
 
 
-    public static int ejecutar(String archivo, String patron) throws IOException {
-        return knuthMorrisPrat(IO.leerArchivo(archivo), patron);
+    public static int ejecutar(String texto, String patron) throws IOException {
+
+        return knuthMorrisPrat(texto, patron);
     }
 
     public static int algoritmo(String patron, String texto, int[] fallo) {
@@ -62,8 +63,8 @@ public class KnutMorrisPratt {
     public static int knuthMorrisPrat(String texto, String patron) {
         int ocurrencias = 0;
         if (patron.length() > 0 && texto.length() >= patron.length()) {
-            int[] fallo = new int[patron.length()];
-            fallo = preproceso(patron);//matriz de fallos
+            int[] fallo;
+            fallo = preproceso(patron);
             ocurrencias = algoritmo(patron, texto, fallo);
         }
         return ocurrencias;

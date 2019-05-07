@@ -46,4 +46,9 @@ public class Utilidades {
         }
 
     }
+
+
+    public static int numeroAleatorio(int Min, int Max){
+       return Min + (int)(Math.random() * ((Max - Min) + 1));
+    }
 }

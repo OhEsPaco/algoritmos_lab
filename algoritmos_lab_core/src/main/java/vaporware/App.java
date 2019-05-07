@@ -8,10 +8,9 @@ import vaporware.utilidades.IO;
 
 public class App {
     public static void main(String[] args) {
-        Practica4 p=new Practica4();
-        p.ejecutar();
 
-       /* Practica[] practicas = {new Practica1(), new Practica2()};
+
+        Practica[] practicas = {new Practica1(), new Practica2(), new Practica3(), new Practica4()};
 
         do {
             int opcion = generarMenu(practicas);
@@ -24,7 +23,7 @@ public class App {
                 System.out.println("Opcion incorrecta");
             }
 
-        } while (true);*/
+        } while (true);
 
     }
 
